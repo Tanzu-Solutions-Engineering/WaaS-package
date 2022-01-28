@@ -1,0 +1,35 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("_helpers.star", "helpers")
+
+#@ if helpers.is_pkg_enabled("contour.tanzu.vmware.com"):
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: contour
+  namespace: waas-install
+  annotations:
+    kapp.k14s.io/change-group: contour
+    kapp.k14s.io/change-rule.cert-manager: "upsert after upserting cert-manager" 
+    kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
+spec:
+  serviceAccountName: waas-install-sa
+  packageRef:
+    refName: contour.tanzu.vmware.com
+    versionSelection:
+      constraints: ">1.17.1"
+      prereleases: {}
+  values:
+  - secretRef:
+      name: contour-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: contour-values
+  namespace: waas-install
+stringData:
+  values.yaml: #@ yaml.encode(data.values.contour)
+#@ end
+

@@ -1,0 +1,13 @@
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: metacontroller
+  namespace: waas-install
+spec:
+  packageRef:
+    refName: metacontroller.vmware.com
+    versionSelection:
+      constraints: 2.0.12+0
+      prereleases: {}
+  serviceAccountName: waas-install-sa

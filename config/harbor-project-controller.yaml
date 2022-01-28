@@ -1,0 +1,23 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: harbor-project-controller
+  namespace: waas-install
+spec:
+  packageRef:
+    refName: harbor-project-controller.vmware.com
+    versionSelection:
+      constraints: 1.0.0
+      prereleases: {}
+  serviceAccountName: waas-install-sa
+  values:
+  - secretRef:
+      name: harbor-project-controller-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor-project-controller-values
+  namespace: waas-install
+stringData:
+  values.yaml: #@ yaml.encode(data.values.harbor_project_controller)

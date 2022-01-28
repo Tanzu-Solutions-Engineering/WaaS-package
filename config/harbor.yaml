@@ -1,0 +1,27 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  annotations:
+    kapp.k14s.io/change-group: harbor
+    kapp.k14s.io/change-rule.contour: "upsert after upserting contour" 
+    kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
+  name: harbor
+  namespace: waas-install
+spec:
+  packageRef:
+    refName: harbor.tanzu.vmware.com
+    versionSelection:
+      constraints: 2.2.3+vmware.1-tkg.1
+      prereleases: {}
+  serviceAccountName: waas-install-sa
+  values:
+  - secretRef:
+      name: harbor-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor-values
+  namespace: waas-install
+stringData:
+  values.yaml: #@ yaml.encode(data.values.harbor)

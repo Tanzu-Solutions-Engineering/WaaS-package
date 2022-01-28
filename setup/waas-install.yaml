@@ -1,0 +1,23 @@
+---
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: waas-install
+  namespace: waas-install
+  annotations:
+    kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
+spec:
+  serviceAccountName: waas-install-sa
+  fetch:
+  - git:
+      url: https://github.com/Tanzu-Solutions-Engineering/WaaS-package
+      ref: origin/main
+      subPath: config
+      lfsSkipSmudge: true
+  template:
+  - ytt:
+      valuesFrom:
+      - secretRef:
+          name: waas-install-values
+  deploy:
+  - kapp: {}

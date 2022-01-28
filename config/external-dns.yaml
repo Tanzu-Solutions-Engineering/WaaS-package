@@ -1,0 +1,53 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("_helpers.star", "helpers")
+
+#@ if helpers.is_pkg_enabled("external-dns.tanzu.vmware.com"):
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  annotations:
+    kapp.k14s.io/change-group: external-dns
+    kapp.k14s.io/change-rule.cert-manager: "upsert after upserting cert-manager" 
+    kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: route53-credentials
+  name: external-dns
+  namespace: waas-install
+spec:
+  packageRef:
+    refName: external-dns.tanzu.vmware.com
+    versionSelection:
+      constraints: ">0.8.0"
+      prereleases: {}
+  serviceAccountName: waas-install-sa
+  values:
+  - secretRef:
+      name: external-dns-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: external-dns-values
+  namespace: waas-install
+stringData:
+  values.yaml: #@ yaml.encode(data.values.external_dns)
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: route53-credentials
+  namespace: waas-install
+stringData:
+  #@yaml/text-templated-strings
+  secret.yaml: |
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: external-dns-values
+      namespace: (@= data.values.external_dns.namespace @)
+    stringData:
+      aws_access_key_id: (@= data.values.external_dns_extras.aws_access_key_id @)
+      aws_secret_access_key: (@= data.values.external_dns_extras.aws_secret_access_key @)
+#@ end

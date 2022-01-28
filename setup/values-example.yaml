@@ -1,0 +1,163 @@
+#@data/values
+---
+excluded_packages: []
+contour:
+  infrastructure_provider: aws
+  envoy:
+    service:
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: '*.workshop.amer.end2end.link'
+external_dns:
+  namespace: tanzu-system-service-discovery
+  deployment:
+    args:
+    - --source=service
+    - --domain-filter=amer.end2end.link
+    - --policy=upsert-only
+    - --registry=txt
+    - --txt-owner-id=Z0SOMETHING
+    - --txt-prefix=txt
+    - --provider=aws
+    - --aws-zone-type=public
+    - --aws-prefer-cname
+    - --aws-assume-role=arn:aws:iam::3234324321:role/some.role
+    env:
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: route53-credentials
+          key: aws_access_key_id
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: route53-credentials
+          key: aws_secret_access_key
+external_dns_extras:
+  aws_access_key_id: AKSOMEKEY
+  aws_secret_access_key: SOMEPASSWORD
+le_certmanager:
+  acme:
+    email: cdelashmutt@vmware.com
+  aws:
+    region: us-east-2
+    credentials:
+      accessKey: AKSOMEKEY
+      secretKey: SOMEPASSWORD
+      certManagerRoleArn: arn:aws:iam::3234324321:role/some.role
+    route53:
+      zoneId: Z0SOMETHING
+harbor:
+  namespace: tanzu-system-registry
+  hostname: harbor.workshop.amer.end2end.link
+  port:
+    https: 443
+  tlsCertificate:
+    tls.crt: notused
+    tls.key: notused
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
+      TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+      cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjAwOTA0MDAwMDAw
+      WhcNMjUwOTE1MTYwMDAwWjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
+      RW5jcnlwdDELMAkGA1UEAxMCUjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+      AoIBAQC7AhUozPaglNMPEuyNVZLD+ILxmaZ6QoinXSaqtSu5xUyxr45r+XXIo9cP
+      R5QUVTVXjJ6oojkZ9YI8QqlObvU7wy7bjcCwXPNZOOftz2nwWgsbvsCUJCWH+jdx
+      sxPnHKzhm+/b5DtFUkWWqcFTzjTIUu61ru2P3mBw4qVUq7ZtDpelQDRrK9O8Zutm
+      NHz6a4uPVymZ+DAXXbpyb/uBxa3Shlg9F8fnCbvxK/eG3MHacV3URuPMrSXBiLxg
+      Z3Vms/EY96Jc5lP/Ooi2R6X/ExjqmAl3P51T+c8B5fWmcBcUr2Ok/5mzk53cU6cG
+      /kiFHaFpriV1uxPMUgP17VGhi9sVAgMBAAGjggEIMIIBBDAOBgNVHQ8BAf8EBAMC
+      AYYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBIGA1UdEwEB/wQIMAYB
+      Af8CAQAwHQYDVR0OBBYEFBQusxe3WFbLrlAJQOYfr52LFMLGMB8GA1UdIwQYMBaA
+      FHm0WeZ7tuXkAXOACIjIGlj26ZtuMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcw
+      AoYWaHR0cDovL3gxLmkubGVuY3Iub3JnLzAnBgNVHR8EIDAeMBygGqAYhhZodHRw
+      Oi8veDEuYy5sZW5jci5vcmcvMCIGA1UdIAQbMBkwCAYGZ4EMAQIBMA0GCysGAQQB
+      gt8TAQEBMA0GCSqGSIb3DQEBCwUAA4ICAQCFyk5HPqP3hUSFvNVneLKYY611TR6W
+      PTNlclQtgaDqw+34IL9fzLdwALduO/ZelN7kIJ+m74uyA+eitRY8kc607TkC53wl
+      ikfmZW4/RvTZ8M6UK+5UzhK8jCdLuMGYL6KvzXGRSgi3yLgjewQtCPkIVz6D2QQz
+      CkcheAmCJ8MqyJu5zlzyZMjAvnnAT45tRAxekrsu94sQ4egdRCnbWSDtY7kh+BIm
+      lJNXoB1lBMEKIq4QDUOXoRgffuDghje1WrG9ML+Hbisq/yFOGwXD9RiX8F6sw6W4
+      avAuvDszue5L3sz85K+EC4Y/wFVDNvZo4TYXao6Z0f+lQKc0t8DQYzk1OXVu8rp2
+      yJMC6alLbBfODALZvYH7n7do1AZls4I9d1P4jnkDrQoxB3UqQ9hVl3LEKQ73xF1O
+      yK5GhDDX8oVfGKF5u+decIsH4YaTw7mP3GFxJSqv3+0lUFJoi5Lc5da149p90Ids
+      hCExroL1+7mryIkXPeFM5TgO9r0rvZaBFOvV2z0gp35Z0+L4WPlbuEjN/lxPFin+
+      HlUjr8gRsI3qfJOQFy/9rKIJR0Y/8Omwt/8oTWgy1mdeHmmjk7j1nYsvC9JSQ6Zv
+      MldlTTKB3zhThV1+XWYp6rjd5JW1zbVWEkLNxE7GJThEUG3szgBVGP7pSWTUTsqX
+      nLRbwHOoq7hHwg==
+      -----END CERTIFICATE-----
+  enableContourHttpProxy: false
+  harborAdminPassword: SOMEPASSWORD
+  secretKey: SOMEPASSWORD
+  database:
+    password: SOMEPASSWORD
+  core:
+    replicas: 1
+    secret: SOMEPASSWORD
+    xsrfKey: SOMEPASSWORD
+  jobservice:
+    replicas: 1
+    secret: SOMEPASSWORD
+  registry:
+    replicas: 1
+    secret: SOMEPASSWORD
+  notary:
+    enabled: true
+  trivy:
+    enabled: true
+    replicas: 1
+    gitHubToken: SOMEPASSWORD
+    skipUpdate: false
+  persistence:
+    persistentVolumeClaim:
+      registry:
+        existingClaim: ""
+        storageClass: ""
+        subPath: ""
+        accessMode: ReadWriteOnce
+        size: 200Gi
+      jobservice:
+        existingClaim: ""
+        storageClass: ""
+        subPath: ""
+        accessMode: ReadWriteOnce
+        size: 1Gi
+      database:
+        existingClaim: ""
+        storageClass: ""
+        subPath: ""
+        accessMode: ReadWriteOnce
+        size: 1Gi
+      redis:
+        existingClaim: ""
+        storageClass: ""
+        subPath: ""
+        accessMode: ReadWriteOnce
+        size: 1Gi
+      trivy:
+        existingClaim: ""
+        storageClass: ""
+        subPath: ""
+        accessMode: ReadWriteOnce
+        size: 5Gi
+    imageChartStorage:
+      disableredirect: false
+      type: filesystem
+      filesystem:
+        rootdirectory: /storage
+  proxy:
+    httpProxy: null
+    httpsProxy: null
+    noProxy: 127.0.0.1,localhost,.local,.internal
+eduk8s:
+  ingress_domain: workshop.amer.end2end.link
+eduk8s_cert:
+  cn: "*.workshop.amer.end2end.link"
+  hostnames:
+  - "*.workshop.amer.end2end.link"
+  - "harbor.workshop.amer.end2end.link"
+  - "notary.workshop.amer.end2end.link"
+harbor_project_controller:
+  harbor:
+    hostname: harbor.workshop.amer.end2end.link
+    username: harbor-project-controller
+    password: SOMEPASSWORD

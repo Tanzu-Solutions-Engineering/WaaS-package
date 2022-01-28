@@ -1,0 +1,27 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+    kapp.k14s.io/change-group: eduk8s-cert
+    kapp.k14s.io/change-rule.eduk8s-operator: "upsert after upserting eduk8s-operator" 
+    kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
+  name: eduk8s-cert
+  namespace: eduk8s
+spec:
+  commonName: #@ data.values.eduk8s_cert.cn
+  dnsNames: #@ data.values.eduk8s_cert.hostnames
+  duration: 2160h0m0s
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-contour-cluster-issuer
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  renewBefore: 360h0m0s
+  secretName: eduk8s-cert-tls
+  subject:
+    organizations:
+    - vmware
