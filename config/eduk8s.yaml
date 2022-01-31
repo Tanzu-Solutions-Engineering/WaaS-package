@@ -43,6 +43,14 @@ spec:
                       value: #@ data.values.ingress_domain
                     - name: INGRESS_SECRET
                       value: eduk8s-cert-tls
+          cluster-role-binding-overlay.yaml: |
+            #@ load("@ytt:overlay", "overlay")
+            #@overlay/match by=overlay.subset({"apiVersion": "rbac.authorization.k8s.io/v1", "kind": "ClusterRoleBinding", "metadata": {"name": "eduk8s-cluster-admin"}}), expects="1+"
+            ---
+            subjects:
+            - kind: ServiceAccount
+              name: eduk8s
+              namespace: eduk8s
       paths:
       - crds-v1
       - operator
