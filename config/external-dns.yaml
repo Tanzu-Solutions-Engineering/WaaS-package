@@ -39,6 +39,6 @@ metadata:
   name: route53-credentials
   namespace: #@ data.values.external_dns.namespace
 stringData:
-    aws_access_key_id: (@= data.values.external_dns_extras.aws_access_key_id @)
-    aws_secret_access_key: (@= data.values.external_dns_extras.aws_secret_access_key @)
+    aws_access_key_id: #@ data.values.external_dns_extras.aws_access_key_id
+    aws_secret_access_key: #@ data.values.external_dns_extras.aws_secret_access_key
 #@ end
