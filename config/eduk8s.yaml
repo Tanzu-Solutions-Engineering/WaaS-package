@@ -29,7 +29,7 @@ spec:
           deployment-overlay.yaml: |
             #@ load("@ytt:data", "data")
             #@ load("@ytt:overlay", "overlay")
-            #@overlay/match by=overlay.subset({"apiVersion": "apps/v1", "kind": "Deployment", "metadata": {"name": "eduk8s-operator"}}), expects="1"
+            #@overlay/match by=overlay.subset({"apiVersion": "apps/v1", "kind": "Deployment", "metadata": {"name": "eduk8s-operator"}}), expects="1+"
             ---
             spec:
               template:
