@@ -25,3 +25,14 @@ spec:
   subject:
     organizations:
     - vmware
+---
+apiVersion: projectcontour.io/v1
+kind: TLSCertificateDelegation
+metadata:
+  name: eduk8s-cert-default-delegation
+  namespace: eduk8s
+spec:
+  delegations:
+  - secretName: eduk8s-cert-tls
+    targetNamespaces:
+    - '*'
