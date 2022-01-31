@@ -35,6 +35,7 @@ spec:
               template:
                 spec:
                   containers:
+                  #@overlay/match by=overlay.map_key("name")
                   - name: eduk8s
                     imagePullPolicy: IfNotPresent
                     #@overlay/match missing_ok=True
