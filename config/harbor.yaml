@@ -11,6 +11,7 @@ metadata:
     kapp.k14s.io/change-group: harbor
     kapp.k14s.io/change-rule.contour: "upsert after upserting contour" 
     kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: harbor-notary-overlay
   name: harbor
   namespace: waas-install
 spec:
@@ -31,4 +32,23 @@ metadata:
   namespace: waas-install
 stringData:
   values.yaml: #@ yaml.encode(data.values.harbor)
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor-notary-overlay
+  namespace: waas-install
+stringData:
+  overlay-notary-signer-image-fix.yaml: |
+    #@ load("@ytt:overlay", "overlay")
+
+    #@overlay/match by=overlay.and_op(overlay.subset({"kind": "Deployment"}), overlay.subset({"metadata": {"name": "harbor-notary-signer"}}))
+    ---
+    spec:
+      template:
+        spec:
+          containers:
+            #@overlay/match by="name",expects="0+"
+            - name: notary-signer
+              image: projects.registry.vmware.com/tkg/harbor/notary-signer-photon@sha256:4dfbf3777c26c615acfb466b98033c0406766692e9c32f3bb08873a0295e24d1
 #@ end
