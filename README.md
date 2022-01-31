@@ -1,3 +1,6 @@
+First, install cert-manager. 
+tanzu package install cert-manager -p cert-manager.tanzu.vmware.com -v 1.1.0+vmware.1-tkg.2
+
 kubectl create ns waas-install
 
 kubectl apply -f setup/rbac/service-account.yaml

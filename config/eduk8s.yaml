@@ -43,8 +43,8 @@ spec:
                     - name: INGRESS_SECRET
                       value: eduk8s-cert-tls
       paths:
-      - crds-v1
-      - operator
+      - resources/crds-v1
+      - resources/operator
       valuesFrom:
       - secretRef:
           name: eduk8s-values
