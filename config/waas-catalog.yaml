@@ -1,0 +1,35 @@
+---
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: waas-catalog
+  namespace: waas-install
+  annotations:
+    kapp.k14s.io/change-group: waas-catalog
+    kapp.k14s.io/change-rule.contour: "upsert after upserting eduk8s" 
+    kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
+spec:
+  serviceAccountName: waas-install-sa
+  fetch:
+  - git:
+      url: https://github.com/Tanzu-Solutions-Engineering/WaaS-catalog
+      ref: origin/main
+      lfsSkipSmudge: true
+  template:
+  - ytt:
+      ignoreUnknownComments: true
+      paths:
+      - workshops/
+      valuesFrom:
+      - secretRef:
+          name: waas-catalog-values
+  deploy:
+  - kapp: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: waas-catalog-values
+  namespace: waas-install
+stringData:
+  values.yaml: #@ yaml.encode(data.values.waas_catalog)

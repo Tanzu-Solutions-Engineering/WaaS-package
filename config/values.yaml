@@ -28,3 +28,6 @@ eduk8s_cert: {}
 
 #@schema/type any=True
 harbor_project_controller: {}
+
+#@schema/type any=True
+waas_catalog: {}
