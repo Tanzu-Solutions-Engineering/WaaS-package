@@ -1,3 +1,9 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("_helpers.star", "helpers")
+
+#@ if helpers.is_pkg_enabled("harbor-project-controller.vmware.com"):
+---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
@@ -23,3 +29,4 @@ metadata:
   namespace: waas-install
 stringData:
   values.yaml: #@ yaml.encode(data.values.harbor_project_controller)
+#@ end

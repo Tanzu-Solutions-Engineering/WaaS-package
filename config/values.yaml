@@ -1,0 +1,26 @@
+#@data/values-schema
+---
+#! e.g. "cert-manager.vmware.com"
+excluded_packages:
+- ""
+
+#@schema/type any=True
+contour: {}
+
+#@schema/type any=True
+external_dns: {}
+
+#@schema/type any=True
+le_certmanager: {}
+
+#@schema/type any=True
+harbor: {}
+
+#@schema/type any=True
+eduk8s: {}
+
+#@schema/type any=True
+eduk8s_cert: {}
+
+#@schema/type any=True
+harbor_project_controller: {}

@@ -1,3 +1,8 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("_helpers.star", "helpers")
+
+#@ if helpers.is_pkg_enabled("eduk8s.vmware.com"):
 ---
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
@@ -54,5 +59,4 @@ metadata:
   namespace: waas-install
 stringData:
   values.yaml: #@ yaml.encode(data.values.eduk8s)
-
-
+#@ end

@@ -1,5 +1,3 @@
-#@data/values
----
 excluded_packages: []
 contour:
   infrastructure_provider: aws
