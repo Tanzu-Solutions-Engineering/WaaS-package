@@ -54,7 +54,7 @@ stringData:
   httpproxy-tls.yaml: |
     #@ load("@ytt:overlay", "overlay")
 
-    #@overlay/match by=overlay.and_op(overlay.subset({"kind": "HTTPProxy"}), overlay.or_op(overlay.subset({"metadata": {"name": "harbor-httpproxy"}}), overlay.subset({"metadata": {"name": "harbor-httpproxy-notary"}})))
+    #@overlay/match by=overlay.and_op(overlay.subset({"kind": "HTTPProxy"}), overlay.or_op(overlay.subset({"metadata": {"name": "harbor-httpproxy"}}), overlay.subset({"metadata": {"name": "harbor-httpproxy-notary"}}))), expects="2+"
     ---
     spec:
       virtualhost:
