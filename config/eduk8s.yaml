@@ -54,8 +54,6 @@ spec:
       paths:
       - crds-v1
       - operator
-      - deployment-overlay.yaml
-      - cluster-role-binding-overlay.yaml
       valuesFrom:
       - secretRef:
           name: eduk8s-values
