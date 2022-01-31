@@ -51,6 +51,7 @@ spec:
   deploy:
   - kapp:
       intoNs: eduk8s
+      inspect: {}
 ---
 apiVersion: v1
 kind: Secret
