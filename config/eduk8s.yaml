@@ -29,7 +29,7 @@ spec:
           deployment-overlay.yaml: |
             #@ load("@ytt:data", "data")
             #@ load("@ytt:overlay", "overlay")
-            #@overlay/match by=subset({"apiVersion": "apps/v1", "kind": "Deployment", "metadata": {"name": "eduk8s-operator"}}), expects="1+"
+            #@overlay/match by=overlay.subset({"apiVersion": "apps/v1", "kind": "Deployment", "metadata": {"name": "eduk8s-operator"}}), expects="1"
             spec:
               template:
                 spec:
@@ -43,8 +43,8 @@ spec:
                     - name: INGRESS_SECRET
                       value: eduk8s-cert-tls
       paths:
-      - resources/crds-v1
-      - resources/operator
+      - crds-v1
+      - operator
       valuesFrom:
       - secretRef:
           name: eduk8s-values
