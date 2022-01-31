@@ -37,17 +37,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: route53-credentials
-  namespace: tanzu-system-service-discovery
+  namespace: #@ data.values.external_dns.namespace
 stringData:
-  #@yaml/text-templated-strings
-  secret.yaml: |
-    ---
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: external-dns-values
-      namespace: (@= data.values.external_dns.namespace @)
-    stringData:
-      aws_access_key_id: (@= data.values.external_dns_extras.aws_access_key_id @)
-      aws_secret_access_key: (@= data.values.external_dns_extras.aws_secret_access_key @)
+    aws_access_key_id: (@= data.values.external_dns_extras.aws_access_key_id @)
+    aws_secret_access_key: (@= data.values.external_dns_extras.aws_secret_access_key @)
 #@ end
