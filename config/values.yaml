@@ -10,6 +10,10 @@ contour: {}
 #@schema/type any=True
 external_dns: {}
 
+external_dns_extras:
+  aws_access_key_id: ""
+  aws_secret_access_key: ""
+
 #@schema/type any=True
 le_certmanager: {}
 
