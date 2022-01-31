@@ -39,7 +39,7 @@ spec:
                     #@overlay/match missing_ok=True
                     env:
                     - name: INGRESS_DOMAIN
-                      value: #@ data.values.eduk8s.ingress_domain
+                      value: #@ data.values.ingress_domain
                     - name: INGRESS_SECRET
                       value: eduk8s-cert-tls
       paths:
