@@ -30,6 +30,7 @@ spec:
             #@ load("@ytt:data", "data")
             #@ load("@ytt:overlay", "overlay")
             #@overlay/match by=overlay.subset({"apiVersion": "apps/v1", "kind": "Deployment", "metadata": {"name": "eduk8s-operator"}}), expects="1"
+            ---
             spec:
               template:
                 spec:
@@ -51,7 +52,6 @@ spec:
   deploy:
   - kapp:
       intoNs: eduk8s
-      inspect: {}
 ---
 apiVersion: v1
 kind: Secret
