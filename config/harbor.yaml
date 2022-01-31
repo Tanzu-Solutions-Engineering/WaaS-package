@@ -51,4 +51,13 @@ stringData:
             #@overlay/match by="name",expects="0+"
             - name: notary-signer
               image: projects.registry.vmware.com/tkg/harbor/notary-signer-photon@sha256:4dfbf3777c26c615acfb466b98033c0406766692e9c32f3bb08873a0295e24d1
+  httpproxy-tls.yaml: |
+    #@ load("@ytt:overlay", "overlay")
+
+    #@overlay/match by=overlay.and_op(overlay.subset({"kind": "HTTPProxy"}), overlay.or_op(overlay.subset({"metadata": {"name": "harbor-httpproxy"}}), overlay.subset({"metadata": {"name": "harbor-httpproxy-notary"}})))
+    ---
+    spec:
+      virtualhost:
+        tls:
+          secretName: eduk8s/eduk8s-cert-tls
 #@ end
