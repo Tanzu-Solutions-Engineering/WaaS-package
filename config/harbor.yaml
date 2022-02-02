@@ -69,8 +69,8 @@ stringData:
       name: harbor-project-controller
       namespace: (@= data.values.harbor.namespace @)
     stringData:
-      username: (@= yaml.encode(data.values.harbor_project_controller.username) @)
-      password: (@= yaml.encode(data.values.harbor_project_controller.password) @)
+      username: (@= yaml.encode(data.values.harbor_project_controller.harbor.username) @)
+      password: (@= yaml.encode(data.values.harbor_project_controller.harbor.password) @)
   #@yaml/text-templated-strings
   user-job.yaml: |
     ---
