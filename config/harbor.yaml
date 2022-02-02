@@ -129,7 +129,7 @@ stringData:
           containers:
           - name: job
             image: bitnami/python
-            command: ["sh", "-c", "'pip install -r requirements.txt && python script.py'"]
+            command: ["sh", "-c", "pip install -r requirements.txt && python script.py"]
             volumeMounts:
             - name: app
               mountPath: /app
