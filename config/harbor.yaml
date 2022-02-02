@@ -99,7 +99,7 @@ stringData:
                 print(f'Found user {project_controller_user} with id {user_id}.')
                 sys.exit(0)
             else:
-                print(f'Didn\'t find user "{project_controller_user}".  Creating.' )
+                print(f'Didn\\'t find user "{project_controller_user}".  Creating.' )
                 # Needed to get rid of CSRF tokens
                 session.cookies.clear()
                 user = session.post(f'{url}/users', json={'username': project_controller_user, 'password': project_controller_password, 'realname': 'Harbor Project Controller', 'email': 'noone@invalid.domain', 'sysadmin_flag': True})
@@ -107,7 +107,7 @@ stringData:
                     print(f'Successfully created user "{project_controller_user}"' )
                     sys.exit(0)
                 else:
-                    print(f'Couldn\'t create user.  Status Code: {user.status_code} Response: {user.text}')
+                    print(f'Couldn\\'t create user.  Status Code: {user.status_code} Response: {user.text}')
         else:
             print(f'Didn't get a successful status code searching for user: {user.status_code}: {user.text}')
 
