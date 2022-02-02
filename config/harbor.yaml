@@ -11,7 +11,7 @@ metadata:
     kapp.k14s.io/change-group: harbor
     kapp.k14s.io/change-rule.contour: "upsert after upserting contour" 
     kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
-    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: harbor-notary-overlay
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: harbor-overlay
   name: harbor
   namespace: waas-install
 spec:
@@ -36,7 +36,7 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: harbor-notary-overlay
+  name: harbor-overlay
   namespace: waas-install
 stringData:
   overlay-notary-signer-image-fix.yaml: |
@@ -60,4 +60,107 @@ stringData:
       virtualhost:
         tls:
           secretName: eduk8s/eduk8s-cert-tls
+  #@yaml/text-templated-strings
+  user-job-secret.yaml: |
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: harbor-project-controller
+      namespace: (@= data.values.harbor.namespace @)
+    stringData:
+      username: (@= yaml.encode(data.values.harbor_project_controller.username) @)
+      password: (@= yaml.encode(data.values.harbor_project_controller.password) @)
+  #@yaml/text-templated-strings
+  user-job.yaml: |
+    ---
+    apiVersion: v1
+    data:
+      requirements.txt: requests ~= 2.27
+      script.py: |-
+        import os, sys
+        import requests
+
+        session = requests.Session()
+        session.auth = (os.environ['HARBOR_USER'], os.environ['HARBOR_PASSWORD'])
+        session.headers = {'user-agent': "harbor-project-controller-job/0.0.1", 'accept': 'application/json'}
+
+        url = os.environ['HARBOR_URL']+'/api/v2.0'
+        project_controller_user = os.environ['HARBOR_PROJECT_CONTROLLER_USER']
+        project_controller_password = os.environ['HARBOR_PROJECT_CONTROLLER_PASSWORD']
+
+        # Check if user exists
+        print(f'Checking for user {project_controller_user}')
+        user = session.get(f'{url}/users/search', params={'username': project_controller_user})
+        if user.status_code == 200:
+            user_json = user.json()
+            if user_json and len(user_json)==1:
+                user_id = user_json[0]['user_id']
+                print(f'Found user {project_controller_user} with id {user_id}.')
+                sys.exit(0)
+            else:
+                print(f'Didn\'t find user "{project_controller_user}".  Creating.' )
+                # Needed to get rid of CSRF tokens
+                session.cookies.clear()
+                user = session.post(f'{url}/users', json={'username': project_controller_user, 'password': project_controller_password, 'realname': 'Harbor Project Controller', 'email': 'noone@invalid.domain', 'sysadmin_flag': True})
+                if user.status_code == 201:
+                    print(f'Successfully created user "{project_controller_user}"' )
+                    sys.exit(0)
+                else:
+                    print(f'Couldn\'t create user.  Status Code: {user.status_code} Response: {user.text}')
+        else:
+            print(f'Didn't get a successful status code searching for user: {user.status_code}: {user.text}')
+
+        # Exit with error if we didn't hit a success path
+        sys.exit(-1)
+    kind: ConfigMap
+    metadata:
+      name: harbor-project-controller-user-script
+      namespace: (@= data.values.harbor.namespace @)
+    ---
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: harbor-project-controller-user
+      namespace: (@= data.values.harbor.namespace @)
+    spec:
+      template:
+        spec:
+          containers:
+          - name: job
+            image: bitnami/python
+            command: ["sh", "-c", "'pip install -r requirements.txt && python script.py'"]
+            volumeMounts:
+            - name: app
+              mountPath: /app
+            env:
+            - name: HARBOR_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: harbor-core-ver-1
+                  key: EXT_ENDPOINT
+            - name: HARBOR_USER
+              value: admin
+            - name: HARBOR_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-core-ver-1
+                  key: HARBOR_ADMIN_PASSWORD
+            - name: HARBOR_PROJECT_CONTROLLER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-project-controller
+                  key: username
+            - name: HARBOR_PROJECT_CONTROLLER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-project-controller
+                  key: password
+          restartPolicy: Never
+          volumes:
+          - name: app
+            configMap:
+              name: harbor-project-controller-user-script
+      backoffLimit: 4
+
 #@ end
