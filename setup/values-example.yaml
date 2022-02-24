@@ -159,3 +159,6 @@ harbor_project_controller:
     hostname: harbor.workshop.amer.end2end.link
     username: harbor-project-controller
     password: SOMEPASSWORD
+tap_registry:
+  username: your-tanzu-net-username@domain
+  password: your-tanzu-net-password

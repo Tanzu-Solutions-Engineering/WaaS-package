@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+stringData:
+  #@yaml/text-templated-strings
+  .dockerconfigjson: {"auths":{"registry.tanzu.vmware.com":{"username":"(@= data.values.tap_registry.username @)","password":"(@= data.values.tap_registry.password @)"}}}
+kind: Secret
+metadata:
+  name: tap-registry
+  namespace: waas-install
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretExport
+metadata:
+  name: tap-registry
+  namespace: waas-install
+spec:
+  toNamespaces:
+  - '*'
