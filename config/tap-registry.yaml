@@ -1,6 +1,11 @@
 #@ load("@ytt:data", "data")
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: tap-install
+---
+apiVersion: v1
 stringData:
   #@yaml/text-templated-strings
   .dockerconfigjson: |
@@ -8,14 +13,26 @@ stringData:
 kind: Secret
 metadata:
   name: tap-registry
-  namespace: waas-install
+  namespace: tap-install
 type: kubernetes.io/dockerconfigjson
 ---
 apiVersion: secretgen.carvel.dev/v1alpha1
 kind: SecretExport
 metadata:
   name: tap-registry
-  namespace: waas-install
+  namespace: tap-install
 spec:
   toNamespaces:
   - '*'
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  finalizers:
+  - finalizers.packagerepository.packaging.carvel.dev/delete
+  name: tanzu-tap-repository
+  namespace: tap-install
+spec:
+  fetch:
+    imgpkgBundle:
+      image: registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.1
