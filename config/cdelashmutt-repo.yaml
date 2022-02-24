@@ -1,0 +1,12 @@
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  finalizers:
+  - finalizers.packagerepository.packaging.carvel.dev/delete
+  name: cdelashmutt-repository
+  namespace: waas-install
+spec:
+  fetch:
+    imgpkgBundle:
+      image: ghcr.io/cdelashmutt-pivotal/packagerepo:1.0.0
