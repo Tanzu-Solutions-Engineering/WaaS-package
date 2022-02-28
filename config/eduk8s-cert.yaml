@@ -8,7 +8,7 @@ metadata:
     kapp.k14s.io/change-rule.eduk8s-operator: "upsert after upserting eduk8s-operator" 
     kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
   name: eduk8s-cert
-  namespace: eduk8s
+  namespace: waas-install
 spec:
   commonName: #@ data.values.eduk8s_cert.cn
   dnsNames: #@ data.values.eduk8s_cert.hostnames
@@ -26,13 +26,11 @@ spec:
     organizations:
     - vmware
 ---
-apiVersion: projectcontour.io/v1
-kind: TLSCertificateDelegation
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretExport
 metadata:
-  name: eduk8s-cert-default-delegation
-  namespace: eduk8s
+  name: eduk8s-cert
+  namespace: waas-install
 spec:
-  delegations:
-  - secretName: eduk8s-cert-tls
-    targetNamespaces:
-    - '*'
+  toNamespaces:
+  - '*'
