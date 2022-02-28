@@ -52,7 +52,7 @@ spec:
   packageRef:
     refName: tap.tanzu.vmware.com
     versionSelection:
-      constraints: ">1.0.1"
+      constraints: "1.0.1"
       prereleases: {}
   serviceAccountName: waas-install-sa
   values:
