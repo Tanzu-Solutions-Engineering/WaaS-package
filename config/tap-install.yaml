@@ -37,65 +37,65 @@ spec:
   fetch:
     imgpkgBundle:
       image: registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.1
-#! ---
-#! apiVersion: rbac.authorization.k8s.io/v1
-#! kind: ClusterRole
-#! metadata:
-#!   name: tap-install-cluster-admin-role
-#!   annotations: 
-#!     kapp.k14s.io/change-group: tap-serviceaccount
-#! rules:
-#! - apiGroups:
-#!   - '*'
-#!   resources:
-#!   - '*'
-#!   verbs:
-#!   - '*'
-#! ---
-#! apiVersion: rbac.authorization.k8s.io/v1
-#! kind: ClusterRoleBinding
-#! metadata:
-#!   name: tap-install-cluster-admin-role-binding
-#!   annotations: 
-#!     kapp.k14s.io/change-group: tap-serviceaccount
-#! roleRef:
-#!   apiGroup: rbac.authorization.k8s.io
-#!   kind: ClusterRole
-#!   name: tap-install-cluster-admin-role
-#! subjects:
-#! - kind: ServiceAccount
-#!   name: tap-install-sa
-#!   namespace: tap-install
-#! ---
-#! apiVersion: v1
-#! kind: ServiceAccount
-#! metadata:
-#!   name: tap-install-sa
-#!   namespace: tap-install
-#!   annotations: 
-#!     kapp.k14s.io/change-group: tap-serviceaccount
-#! ---
-#! apiVersion: packaging.carvel.dev/v1alpha1
-#! kind: PackageInstall
-#! metadata:
-#!   annotations:
-#!     kapp.k14s.io/change-group: tap
-#!     kapp.k14s.io/change-rule.tap-harbor-project: "upsert after upserting tap-harbor-project" 
-#!     kapp.k14s.io/change-rule.serviceaccount: "upsert after upserting tap-serviceaccount"
-#!     kapp.k14s.io/change-rule.tap-harbor-project: "delete before deleting tap-harbor-project"
-#!     kapp.k14s.io/change-rule.serviceaccount: "delete before deleting tap-serviceaccount"
-#!   name: tap-full
-#!   namespace: tap-install
-#! spec:
-#!   packageRef:
-#!     refName: tap.tanzu.vmware.com
-#!     versionSelection:
-#!       constraints: "1.0.1"
-#!       prereleases: {}
-#!   serviceAccountName: tap-install-sa
-#!   values:
-#!   - secretRef:
-#!       name: tap-values
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tap-install-cluster-admin-role
+  annotations: 
+    kapp.k14s.io/change-group: tap-serviceaccount
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tap-install-cluster-admin-role-binding
+  annotations: 
+    kapp.k14s.io/change-group: tap-serviceaccount
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tap-install-cluster-admin-role
+subjects:
+- kind: ServiceAccount
+  name: tap-install-sa
+  namespace: tap-install
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tap-install-sa
+  namespace: tap-install
+  annotations: 
+    kapp.k14s.io/change-group: tap-serviceaccount
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  annotations:
+    kapp.k14s.io/change-group: tap
+    kapp.k14s.io/change-rule.tap-harbor-project: "upsert after upserting tap-harbor-project" 
+    kapp.k14s.io/change-rule.serviceaccount: "upsert after upserting tap-serviceaccount"
+    kapp.k14s.io/change-rule.tap-harbor-project: "delete before deleting tap-harbor-project"
+    kapp.k14s.io/change-rule.serviceaccount: "delete before deleting tap-serviceaccount"
+  name: tap-full
+  namespace: tap-install
+spec:
+  packageRef:
+    refName: tap.tanzu.vmware.com
+    versionSelection:
+      constraints: "1.0.1"
+      prereleases: {}
+  serviceAccountName: tap-install-sa
+  values:
+  - secretRef:
+      name: tap-values
 ---
 apiVersion: v1
 kind: Secret
