@@ -1,6 +1,5 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:yaml", "yaml")
-
 ---
 apiVersion: v1
 kind: Namespace
@@ -39,6 +38,43 @@ spec:
     imgpkgBundle:
       image: registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.1
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: waas-install-cluster-admin-role
+  annotations: 
+    kapp.k14s.io/change-group: serviceaccount
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tap-install-cluster-admin-role-binding
+  annotations: 
+    kapp.k14s.io/change-group: serviceaccount
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tap-install-cluster-admin-role
+subjects:
+- kind: ServiceAccount
+  name: tap-install-sa
+  namespace: tap-install
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tap-install-sa
+  namespace: tap-install
+  annotations: 
+    kapp.k14s.io/change-group: serviceaccount
+---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
@@ -54,7 +90,7 @@ spec:
     versionSelection:
       constraints: "1.0.1"
       prereleases: {}
-  serviceAccountName: waas-install-sa
+  serviceAccountName: tap-install-sa
   values:
   - secretRef:
       name: tap-values
