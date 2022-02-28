@@ -41,7 +41,7 @@ spec:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: waas-install-cluster-admin-role
+  name: tap-install-cluster-admin-role
   annotations: 
     kapp.k14s.io/change-group: serviceaccount
 rules:
