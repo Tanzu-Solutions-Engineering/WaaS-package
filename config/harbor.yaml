@@ -39,6 +39,15 @@ metadata:
   name: harbor-overlay
   namespace: waas-install
 stringData:
+  secret-import.yaml: |
+    ---
+    apiVersion: secretgen.carvel.dev/v1alpha1
+    kind: SecretImport
+    metadata:
+      name: eduk8s-cert-tls
+      namespace: tanzu-system-registry
+    spec:
+      fromNamespace: waas-install
   httpproxy-tls.yaml: |
     #@ load("@ytt:overlay", "overlay")
 
