@@ -3,10 +3,10 @@ apiVersion: e2e.tanzu.vmware.com/v1beta1
 kind: HarborProject
 metadata:
   annotations:
-    kapp.k14s.io/change-group: buildservice-harbor-project
+    kapp.k14s.io/change-group: tap-harbor-project
     kapp.k14s.io/change-rule.cert-manager: "upsert after upserting harbor-project-controller" 
     kapp.k14s.io/change-rule.serviceaccount: "delete before deleting harbor-project-controller"
-  name: build-service
+  name: tap
   namespace: waas-install
 spec:
-  name: build-service
+  name: tap
