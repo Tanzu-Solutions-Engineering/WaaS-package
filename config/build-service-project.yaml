@@ -1,8 +1,5 @@
-#@ load("@ytt:data", "data")
-#@ load("@ytt:yaml", "yaml")
-
 ---
-apiVersion: packaging.carvel.dev/v1alpha1
+apiVersion: e2e.tanzu.vmware.com/v1beta1
 kind: HarborProject
 metadata:
   annotations:
