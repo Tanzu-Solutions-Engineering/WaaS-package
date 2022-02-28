@@ -41,7 +41,7 @@ spec:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: tap-install-cluster-admin-role
+  name: tap-package-install-cluster-admin-role
   annotations: 
     kapp.k14s.io/change-group: tap-serviceaccount
 rules:
@@ -55,22 +55,22 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: tap-install-cluster-admin-role-binding
+  name: tap-packge-install-cluster-admin-role-binding
   annotations: 
     kapp.k14s.io/change-group: tap-serviceaccount
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: tap-install-cluster-admin-role
+  name: tap-package-install-cluster-admin-role
 subjects:
 - kind: ServiceAccount
-  name: tap-install-sa
+  name: tap-package-install-sa
   namespace: tap-install
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: tap-install-sa
+  name: tap-package-install-sa
   namespace: tap-install
   annotations: 
     kapp.k14s.io/change-group: tap-serviceaccount
@@ -92,7 +92,7 @@ spec:
     versionSelection:
       constraints: "1.0.1"
       prereleases: {}
-  serviceAccountName: tap-install-sa
+  serviceAccountName: tap-package-install-sa
   values:
   - secretRef:
       name: tap-values
