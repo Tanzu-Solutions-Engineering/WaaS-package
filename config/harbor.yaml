@@ -47,7 +47,7 @@ stringData:
     spec:
       virtualhost:
         tls:
-          secretName: eduk8s/eduk8s-cert-tls
+          secretName: eduk8s-cert-tls
   #@yaml/text-templated-strings
   user-job-secret.yaml: |
     ---
