@@ -159,6 +159,47 @@ harbor_project_controller:
     hostname: harbor.workshop.amer.end2end.link
     username: harbor-project-controller
     password: SOMEPASSWORD
-tap_registry:
-  username: your-tanzu-net-username@domain
-  password: your-tanzu-net-password
+tap:
+  profile: full
+  ceip_policy_disclosed: true
+  buildservice:
+    kp_default_repository: "KP-DEFAULT-REPO"
+    kp_default_repository_username: "KP-DEFAULT-REPO-USERNAME"
+    kp_default_repository_password: "KP-DEFAULT-REPO-PASSWORD"
+    tanzunet_username: "TANZUNET-USERNAME"
+    tanzunet_password: "TANZUNET-PASSWORD"
+    descriptor_name: "DESCRIPTOR-NAME"
+    enable_automatic_dependency_updates: true
+  supply_chain: basic
+
+  cnrs:
+    domain_name: INGRESS-DOMAIN
+
+  ootb_supply_chain_basic:
+    registry:
+      server: "SERVER-NAME"
+      repository: "REPO-NAME"
+    gitops:
+      ssh_secret: ""
+
+  learningcenter:
+    ingressDomain: "DOMAIN-NAME"
+
+  tap_gui:
+    service_type: ClusterIP
+    ingressEnabled: "true"
+    ingressDomain: "INGRESS-DOMAIN"
+    app_config:
+      app:
+        baseUrl: http://tap-gui.INGRESS-DOMAIN
+      catalog:
+        locations:
+          - type: url
+            target: https://GIT-CATALOG-URL/catalog-info.yaml
+      backend:
+        baseUrl: http://tap-gui.INGRESS-DOMAIN
+        cors:
+          origin: http://tap-gui.INGRESS-DOMAIN
+
+  grype:
+    targetImagePullSecret: "TARGET-REGISTRY-CREDENTIALS-SECRET"

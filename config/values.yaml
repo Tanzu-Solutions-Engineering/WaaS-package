@@ -32,6 +32,5 @@ harbor_project_controller: {}
 #@schema/type any=True
 waas_catalog: {}
 
-tap_registry:
-  username: ""
-  password: ""
+#@schema/type any=True
+tap: {}
