@@ -5,7 +5,7 @@ apiVersion: v1
 stringData:
   #@yaml/text-templated-strings
   .dockerconfigjson: |
-    {"auths":{"registry.tanzu.vmware.com":{"username":"(@= data.values.rabbitmq.tanzunet_username @)","password":"(@= data.values.rabbitmq.tanzunet_password @)", auth: ""}}}
+    {"auths":{"registry.tanzu.vmware.com":{"username":"(@= data.values.rabbitmq.tanzunet_username @)","password":"(@= data.values.rabbitmq.tanzunet_password @)", "auth": ""}}}
 kind: Secret
 metadata:
   name: tanzu-registry
