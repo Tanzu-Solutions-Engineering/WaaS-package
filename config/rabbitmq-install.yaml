@@ -40,4 +40,4 @@ spec:
   packageRef:
     refName: rabbitmq.tanzu.vmware.com
     versionSelection:
-      constraints: ">=1.2.0"
+      constraints: "1.2.0"
