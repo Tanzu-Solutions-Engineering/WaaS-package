@@ -203,3 +203,7 @@ tap:
 
   grype:
     targetImagePullSecret: "TARGET-REGISTRY-CREDENTIALS-SECRET"
+
+rabbitmq:
+  tanzunet_username: "TANZUNET-USERNAME"
+  tanzunet_password: "TANZUNET-PASSWORD"

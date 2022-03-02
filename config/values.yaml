@@ -34,3 +34,7 @@ waas_catalog: {}
 
 #@schema/type any=True
 tap: {}
+
+rabbitmq:
+  tanzunet_username: ""
+  tanzunet_password: ""

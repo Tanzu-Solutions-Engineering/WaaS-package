@@ -1,0 +1,43 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+---
+apiVersion: v1
+stringData:
+  #@yaml/text-templated-strings
+  .dockerconfigjson: |
+    {"auths":{"registry.tanzu.vmware.com":{"username":"(@= data.values.rabbitmq.tanzunet_username @)","password":"(@= data.values.rabbitmq.tanzunet_password @)"}}}
+kind: Secret
+metadata:
+  name: tanzu-registry
+  namespace: waas-install
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretExport
+metadata:
+  name: tanzu-registry
+  namespace: waas-install
+spec:
+  toNamespaces:
+  - '*'
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: tanzu-rabbitmq-repo
+  namespace: waas-install
+spec:
+  fetch:
+    imgpkgBundle:
+      image: registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:1.2.0
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: tanzu-rabbitmq
+spec:
+  serviceAccountName: waas-install-sa
+  packageRef:
+    refName: rabbitmq.tanzu.vmware.com
+    versionSelection:
+      constraints: ">=1.2.0"
