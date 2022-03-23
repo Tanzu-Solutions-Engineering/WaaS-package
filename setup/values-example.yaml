@@ -204,6 +204,6 @@ tap:
   grype:
     targetImagePullSecret: "TARGET-REGISTRY-CREDENTIALS-SECRET"
 
-rabbitmq:
-  tanzunet_username: "TANZUNET-USERNAME"
-  tanzunet_password: "TANZUNET-PASSWORD"
+gitea:
+  ingress_domain: INGRESS-DOMAIN
+  ingress_secret: SECRET-NAME
