@@ -38,3 +38,6 @@ tap: {}
 gitea:
   ingress_domain: ""
   ingress_secret: ""
+
+devnexus:
+  passcode: ""
