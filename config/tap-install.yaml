@@ -36,7 +36,7 @@ metadata:
 spec:
   fetch:
     imgpkgBundle:
-      image: registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.1
+      image: harbor.workshop.amer.end2end.link/registry-tanzu/tap-packages:1.0.1
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
