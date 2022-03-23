@@ -6,7 +6,6 @@ kind: TrainingPortal
 metadata:
   name: devnexus-2022
   annotations:
-    kapp.k14s.io/update-strategy: always-replace
 spec:
   portal:
     registration:
