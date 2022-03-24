@@ -34,3 +34,14 @@ metadata:
 spec:
   toNamespaces:
   - '*'
+---
+apiVersion: contour.vmware.com/v1
+kind: TLSCertificateDelegation
+metadata:
+  name: eduk8s-cert-tls
+  namespace: waas-install
+spec:
+  delegations:
+  - secretName: eduk8s-cert-tls
+    targetNamespaces:
+    - tap-gui
