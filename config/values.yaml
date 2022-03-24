@@ -38,6 +38,7 @@ tap: {}
 gitea:
   ingress_domain: ""
   ingress_secret: ""
+  extra_repository_config: ""
 
 devnexus:
   passcode: ""

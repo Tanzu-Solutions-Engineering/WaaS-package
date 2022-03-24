@@ -207,3 +207,6 @@ tap:
 gitea:
   ingress_domain: INGRESS-DOMAIN
   ingress_secret: SECRET-NAME
+  extra_repository_config: |
+    DEFAULT_BRANCH = main
+    ENABLE_PUSH_CREATE_USER = true
