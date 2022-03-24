@@ -44,4 +44,4 @@ spec:
   delegations:
   - secretName: eduk8s-cert-tls
     targetNamespaces:
-    - tap-gui
+    - "*"
