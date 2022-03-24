@@ -7,6 +7,19 @@ metadata:
   name: tap-install
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: learningcenter
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretImport
+metadata:
+  name: eduk8s-cert-tls
+  namespace: learningcenter
+spec:
+  fromNamespace: waas-install
+---
+apiVersion: v1
 stringData:
   #@yaml/text-templated-strings
   .dockerconfigjson: |
