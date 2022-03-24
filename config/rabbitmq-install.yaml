@@ -21,3 +21,20 @@ spec:
     refName: rabbitmq.tanzu.vmware.com
     versionSelection:
       constraints: "1.2.0"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    resourceclaims.services.apps.tanzu.vmware.com/controller: "true"
+  name: resource-claims-rmq
+rules:
+- apiGroups:
+  - rabbitmq.com
+  resources:
+  - rabbitmqclusters
+  verbs:
+  - get
+  - list
+  - watch
+  - update
