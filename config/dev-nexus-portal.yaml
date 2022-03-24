@@ -16,4 +16,4 @@ spec:
     expires: 60m
     name: tap-overview
     orphaned: 20m
-    reserved: 2
+    reserved: 0
