@@ -35,7 +35,7 @@ spec:
   toNamespaces:
   - '*'
 ---
-apiVersion: contour.vmware.com/v1
+apiVersion: projectcontour.io/v1
 kind: TLSCertificateDelegation
 metadata:
   name: eduk8s-cert-tls
