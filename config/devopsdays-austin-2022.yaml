@@ -4,7 +4,7 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
-  name: devopsdays-atlanta-2022
+  name: devopsdays-austin-2022
 spec:
   portal:
     registration:
