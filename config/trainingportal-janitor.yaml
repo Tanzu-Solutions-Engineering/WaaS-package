@@ -47,3 +47,4 @@ metadata:
 spec:
   toNamespaces:
   - "trainingportal-janitor"
+  - "waas-install"
