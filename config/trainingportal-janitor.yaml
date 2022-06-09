@@ -46,4 +46,4 @@ metadata:
   namespace: waas-install
 spec:
   toNamespaces:
-  - "trainingportal-janitor"  # star means export is available for all namespaces
+  - "trainingportal-janitor"
