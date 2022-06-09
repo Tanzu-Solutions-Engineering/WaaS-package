@@ -32,8 +32,8 @@ stringData:
     {
       "auths": {
         "ghcr.io": {
-          "username": "(@= data.trainingportal_janitor.pull_secret.username @)",
-          "password": "(@= data.trainingportal_janitor.pull_secret.password @)",
+          "username": "(@= data.values.trainingportal_janitor.pull_secret.username @)",
+          "password": "(@= data.values.trainingportal_janitor.pull_secret.password @)",
           "auth": ""
         }
       }
