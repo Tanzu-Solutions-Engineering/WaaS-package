@@ -25,7 +25,7 @@ kind: Secret
 metadata:
   name: trainingportal-reg-creds
   namespace: waas-install
-type: kubernetes.io/dockerconfigjson  # needs to be this type
+type: kubernetes.io/dockerconfigjson
 stringData:
   #@yaml/text-templated-strings
   .dockerconfigjson: |
