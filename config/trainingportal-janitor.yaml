@@ -1,0 +1,49 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("_helpers.star", "helpers")
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: trainingportal-janitor
+  namespace: waas-install
+  annotations:
+    kapp.k14s.io/change-group: trainingportal-janitor
+    kapp.k14s.io/change-rule.cert-manager: "upsert after upserting cert-manager" 
+    kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
+spec:
+  serviceAccountName: waas-install-sa
+  packageRef:
+    refName: trainingportal-janitor.vmware.com
+    versionSelection:
+      constraints: "0.0.1"
+      prereleases: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: trainingportal-reg-creds
+  namespace: waas-install
+type: kubernetes.io/dockerconfigjson  # needs to be this type
+stringData:
+  #@yaml/text-templated-strings
+  .dockerconfigjson: |
+    {
+      "auths": {
+        "ghcr.io": {
+          "username": "(@= data.trainingportal_janitor.pull_secret.username @)",
+          "password": "(@= data.trainingportal_janitor.pull_secret.password @)",
+          "auth": ""
+        }
+      }
+    }    
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretExport
+metadata:
+  name: trainingportal-reg-creds
+  namespace: waas-install
+spec:
+  toNamespaces:
+  - "trainingportal-janitor"  # star means export is available for all namespaces
