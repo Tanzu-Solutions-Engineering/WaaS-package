@@ -184,6 +184,8 @@ tap:
 
   learningcenter:
     ingressDomain: "DOMAIN-NAME"
+    ingressSecret:
+      secretName: eduk8s-cert-tls
 
   tap_gui:
     service_type: ClusterIP
