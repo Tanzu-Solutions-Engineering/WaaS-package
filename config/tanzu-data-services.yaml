@@ -13,7 +13,7 @@ metadata:
 spec:
   fetch:
     imgpkgBundle:
-      image: registry.tanzu.vmware.com/packages-for-vmware-tanzu-data-services/tds-packages:1.5.0
+      image: registry.tanzu.vmware.com/packages-for-vmware-tanzu-data-services/tds-packages:1.2.0
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
