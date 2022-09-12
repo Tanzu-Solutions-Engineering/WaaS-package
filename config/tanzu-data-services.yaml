@@ -1,0 +1,51 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  creationTimestamp: "2022-09-12T18:03:00Z"
+  generation: 1
+  name: tanzu-data-services-repository
+  namespace: waas-install
+  resourceVersion: "1003458107"
+  uid: 76afdf53-3f51-4735-b76f-f6898c1b7190
+spec:
+  fetch:
+    imgpkgBundle:
+      image: registry.tanzu.vmware.com/packages-for-vmware-tanzu-data-services/tds-packages:1.5.0
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: tanzu-mysql-operator
+  namespace: waas-install
+spec:
+  serviceAccountName: waas-install-sa
+  packageRef:
+    refName: mysql-operator.with.sql.tanzu.vmware.com
+    versionSelection:
+      constraints: "1.5.0"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    resourceclaims.services.apps.tanzu.vmware.com/controller: "true"
+  name: mysql-for-kubernetes-mysqls-service-bindings-role
+rules:
+- apiGroups:
+  - with.sql.tanzu.vmware.com
+  resources:
+  - mysqls
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+- apiGroups:
+  - with.sql.tanzu.vmware.com
+  resources:
+  - mysqls/status
+  verbs:
+  - get
