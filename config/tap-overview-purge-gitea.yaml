@@ -11,7 +11,7 @@ metadata:
   name: gitea-admin
   namespace: purge-git
 stringData:
-  gitea_admin_password: #@ data.values.waas_catalog.gitea.admin_password
+  gitea_admin_password: #@ data.values.waas_catalog.gitea.adminPassword
 ---
 apiVersion: batch/v1
 kind: CronJob
