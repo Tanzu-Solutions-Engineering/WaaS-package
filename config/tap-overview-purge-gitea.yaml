@@ -16,46 +16,6 @@ stringData:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: purge-gitops-workloads
-  namespace: purge-git
-spec:
-  concurrencyPolicy: Allow
-  failedJobsHistoryLimit: 1
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - command:
-            - /bin/sh
-            - -c
-            - ./purge-git.sh gitops-workloads; ./purge-git.sh gitops-workloads
-            env:
-            - name: GITEA_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: gitea-admin
-                  key: gitea_admin_password
-                  optional: false
-            - name: INGRESS_DOMAIN
-              value: #@ data.values.gitea.ingress_domain
-            - name: NUM_DAYS
-              value: "1"
-            image: harbor.workshop.amer.end2end.link/tanzu-e2e/purge-gitrepo:latest
-            name: purge
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
-          dnsPolicy: ClusterFirst
-          restartPolicy: Never
-          schedulerName: default-scheduler
-          securityContext: {}
-          terminationGracePeriodSeconds: 30
-  schedule: 0 * * * *
-  successfulJobsHistoryLimit: 3
----
-apiVersion: batch/v1
-kind: CronJob
-metadata:
   name: purge-gitops-deliverables
   namespace: purge-git
 spec:
