@@ -21,9 +21,6 @@ le_certmanager: {}
 harbor: {}
 
 #@schema/type any=True
-harbor2: {}
-
-#@schema/type any=True
 eduk8s: {}
 
 #@schema/type any=True
