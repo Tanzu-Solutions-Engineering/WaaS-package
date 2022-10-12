@@ -39,6 +39,7 @@ metadata:
   name: harbor-overlay
   namespace: waas-install
 stringData:
+  #@yaml/text-templated-strings
   secret-import.yaml: |
     ---
     apiVersion: secretgen.carvel.dev/v1alpha1
