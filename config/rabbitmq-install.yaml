@@ -50,7 +50,7 @@ metadata:
 stringData:
   fix-validating-webhook.yaml: |
     #@ load("@ytt:overlay", "overlay")
-    #@overlay/match by=overlay.subset({"kind": "ValidatingWebhookConfiguration"})
+    #@overlay/match by=overlay.subset({"kind": "ValidatingWebhookConfiguration", "metadata": {"name": "validating-webhook-configuration"}})
     ---
     metadata:
       name: rabbitmq-validating-webhook-configuration
