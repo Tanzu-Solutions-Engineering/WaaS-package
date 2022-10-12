@@ -1,0 +1,165 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("_helpers.star", "helpers")
+
+#@ if helpers.is_pkg_enabled("harbor.tanzu.vmware.com"):
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  annotations:
+    kapp.k14s.io/change-group: harbor2
+    kapp.k14s.io/change-rule.contour: "upsert after upserting contour" 
+    kapp.k14s.io/change-rule.serviceaccount: "delete before deleting serviceaccount"
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: harbor2-overlay
+  name: harbor2
+  namespace: waas-install
+spec:
+  packageRef:
+    refName: harbor.tanzu.vmware.com
+    versionSelection:
+      constraints: ">2.2.3"
+      prereleases: {}
+  serviceAccountName: waas-install-sa
+  values:
+  - secretRef:
+      name: harbor2-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor2-values
+  namespace: waas-install
+stringData:
+  values.yaml: #@ yaml.encode(data.values.harbor2)
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor2-overlay
+  namespace: waas-install
+stringData:
+  secret-import.yaml: |
+    ---
+    apiVersion: secretgen.carvel.dev/v1alpha1
+    kind: SecretImport
+    metadata:
+      name: eduk8s-cert-tls
+      namespace: tanzu-system-registry
+    spec:
+      fromNamespace: waas-install
+  httpproxy-tls.yaml: |
+    #@ load("@ytt:overlay", "overlay")
+
+    #@overlay/match by=overlay.and_op(overlay.subset({"kind": "HTTPProxy"}), overlay.or_op(overlay.subset({"metadata": {"name": "harbor-httpproxy"}}), overlay.subset({"metadata": {"name": "harbor-httpproxy-notary"}}))), expects="2+"
+    ---
+    spec:
+      virtualhost:
+        tls:
+          secretName: eduk8s-cert-tls
+  #@yaml/text-templated-strings
+  user-job-secret.yaml: |
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: harbor-project-controller
+      namespace: (@= data.values.harbor2.namespace @)
+    stringData:
+      username: (@= yaml.encode(data.values.harbor_project_controller.harbor.username) @)
+      password: (@= yaml.encode(data.values.harbor_project_controller.harbor.password) @)
+  #@yaml/text-templated-strings
+  user-job.yaml: |
+    ---
+    apiVersion: v1
+    data:
+      requirements.txt: requests ~= 2.27
+      script.py: |-
+        import os, sys
+        import requests
+
+        session = requests.Session()
+        session.auth = (os.environ['HARBOR_USER'], os.environ['HARBOR_PASSWORD'])
+        session.headers = {'user-agent': "harbor-project-controller-job/0.0.1", 'accept': 'application/json'}
+
+        url = os.environ['HARBOR_URL']+'/api/v2.0'
+        project_controller_user = os.environ['HARBOR_PROJECT_CONTROLLER_USER']
+        project_controller_password = os.environ['HARBOR_PROJECT_CONTROLLER_PASSWORD']
+
+        # Check if user exists
+        print(f'Checking for user {project_controller_user}')
+        user = session.get(f'{url}/users/search', params={'username': project_controller_user})
+        if user.status_code == 200:
+            user_json = user.json()
+            if user_json and len(user_json)==1:
+                user_id = user_json[0]['user_id']
+                print(f'Found user {project_controller_user} with id {user_id}.')
+                sys.exit(0)
+            else:
+                print(f'Did not find user "{project_controller_user}".  Creating.' )
+                # Needed to get rid of CSRF tokens
+                session.cookies.clear()
+                user = session.post(f'{url}/users', json={'username': project_controller_user, 'password': project_controller_password, 'realname': 'Harbor Project Controller', 'email': 'noone@invalid.domain', 'sysadmin_flag': True})
+                if user.status_code == 201:
+                    print(f'Successfully created user "{project_controller_user}"' )
+                    sys.exit(0)
+                else:
+                    print(f'Could not create user.  Status Code: {user.status_code} Response: {user.text}')
+        else:
+            print(f'Did not get a successful status code searching for user: {user.status_code}: {user.text}')
+
+        # Exit with error if we didn't hit a success path
+        sys.exit(-1)
+    kind: ConfigMap
+    metadata:
+      name: harbor-project-controller-user-script
+      namespace: (@= data.values.harbor2.namespace @)
+    ---
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: harbor-project-controller-user
+      namespace: (@= data.values.harbor2.namespace @)
+      annotations:
+        kapp.k14s.io/update-strategy: fallback-on-replace
+    spec:
+      template:
+        spec:
+          containers:
+          - name: job
+            image: bitnami/python
+            command: ["sh", "-c", "pip install -r requirements.txt && python script.py"]
+            volumeMounts:
+            - name: app
+              mountPath: /app
+            env:
+            - name: HARBOR_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: harbor-core-ver-1
+                  key: EXT_ENDPOINT
+            - name: HARBOR_USER
+              value: admin
+            - name: HARBOR_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-core-ver-1
+                  key: HARBOR_ADMIN_PASSWORD
+            - name: HARBOR_PROJECT_CONTROLLER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-project-controller
+                  key: username
+            - name: HARBOR_PROJECT_CONTROLLER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-project-controller
+                  key: password
+          restartPolicy: Never
+          volumes:
+          - name: app
+            configMap:
+              name: harbor-project-controller-user-script
+      backoffLimit: 4
+
+#@ end
