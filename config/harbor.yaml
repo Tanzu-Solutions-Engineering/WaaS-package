@@ -46,7 +46,7 @@ stringData:
     kind: SecretImport
     metadata:
       name: eduk8s-cert-tls
-      namespace: (@= data.values.harbor2.namespace @)
+      namespace: (@= data.values.harbor.namespace @)
     spec:
       fromNamespace: waas-install
   httpproxy-tls.yaml: |
