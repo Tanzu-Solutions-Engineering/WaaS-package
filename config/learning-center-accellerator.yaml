@@ -1,14 +1,14 @@
 ---
-apiVersion: accelerator.apps.tanzu.vmware.com/v1alpha1
-kind: Accelerator
-metadata:
-  name: learning-center-markdown
-  namespace: accelerator-system
-  annotations:
-    kapp.k14s.io/change-rule.tap-up: "upsert after upserting tap" 
-    kapp.k14s.io/change-rule.tap-del: "delete before deleting tap"
-spec:
-  git:
-    url: https://github.com/Tanzu-Solutions-Engineering/learning-center-markdown-accelerator
-    ref:
-      branch: main
+# apiVersion: accelerator.apps.tanzu.vmware.com/v1alpha1
+# kind: Accelerator
+# metadata:
+#   name: learning-center-markdown
+#   namespace: accelerator-system
+#   annotations:
+#     kapp.k14s.io/change-rule.tap-up: "upsert after upserting tap" 
+#     kapp.k14s.io/change-rule.tap-del: "delete before deleting tap"
+# spec:
+#   git:
+#     url: https://github.com/Tanzu-Solutions-Engineering/learning-center-markdown-accelerator
+#     ref:
+#       branch: main
