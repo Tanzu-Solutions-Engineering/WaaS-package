@@ -4,6 +4,11 @@ kind: Accelerator
 metadata:
   name: spring-sensors
   namespace: accelerator-system
+  annotations:
+    kapp.k14s.io/change-rule.tap-harbor-project-up: "upsert after upserting tap" 
+    kapp.k14s.io/change-rule.serviceaccount-up: "upsert after upserting tap"
+    kapp.k14s.io/change-rule.tap-harbor-project-del: "delete before deleting tap"
+    kapp.k14s.io/change-rule.serviceaccount-del: "delete before deleting tap"
 spec:
   git:
     ref:
