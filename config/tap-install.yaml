@@ -6,14 +6,6 @@ kind: Namespace
 metadata:
   name: tap-install
 ---
-apiVersion: secretgen.carvel.dev/v1alpha1
-kind: SecretImport
-metadata:
-  name: eduk8s-cert-tls
-  namespace: learningcenter
-spec:
-  fromNamespace: waas-install
----
 apiVersion: v1
 stringData:
   #@yaml/text-templated-strings
@@ -92,6 +84,7 @@ metadata:
     kapp.k14s.io/change-rule.serviceaccount-up: "upsert after upserting tap-serviceaccount"
     kapp.k14s.io/change-rule.tap-harbor-project-del: "delete before deleting tap-harbor-project"
     kapp.k14s.io/change-rule.serviceaccount-del: "delete before deleting tap-serviceaccount"
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: tap-secretimport-overlay
   name: tap-full
   namespace: tap-install
 spec:
@@ -112,3 +105,18 @@ metadata:
   namespace: tap-install
 stringData:
   values.yaml: #@ yaml.encode(data.values.tap)
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tap-secretimport-overlay
+  namespace: tap-install
+stringData:
+  secret-import.yaml: |
+    apiVersion: secretgen.carvel.dev/v1alpha1
+    kind: SecretImport
+    metadata:
+      name: eduk8s-cert-tls
+      namespace: learningcenter
+    spec:
+      fromNamespace: waas-install
