@@ -87,6 +87,7 @@ apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   annotations:
+    packaging.carvel.dev/downgradable: ""
     kapp.k14s.io/change-group: tap
     kapp.k14s.io/change-rule.tap-harbor-project-up: "upsert after upserting tap-harbor-project" 
     kapp.k14s.io/change-rule.serviceaccount-up: "upsert after upserting tap-serviceaccount"
