@@ -15,6 +15,7 @@ spec:
 ---
 apiVersion: v1
 kind: Secret
+type: servicebinding.io/oauth2
 metadata:
   name: waas-portal-values
   namespace: waas-portal
