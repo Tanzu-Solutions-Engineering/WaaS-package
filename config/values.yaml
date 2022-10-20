@@ -47,3 +47,7 @@ trainingportal_janitor:
   pull_secret:
     username: ""
     password: ""
+
+waas_portal:
+  client_id: ""
+  client_secret: ""

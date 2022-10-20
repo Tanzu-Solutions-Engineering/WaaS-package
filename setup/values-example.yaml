@@ -212,3 +212,7 @@ gitea:
   extra_repository_config: |
     DEFAULT_BRANCH = main
     ENABLE_PUSH_CREATE_USER = true
+
+waas_portal:
+  client_id: FOO_CLIENT
+  client_secret: FOO_SECRET

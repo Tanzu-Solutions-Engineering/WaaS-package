@@ -1,0 +1,59 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: waas-portal
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretImport
+metadata:
+  name: eduk8s-cert-tls
+  namespace: waas-portal
+spec:
+  fromNamespace: waas-install
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: waas-portal-values
+  namespace: waas-portal
+stringData:
+  client-id: #@ data.values.waas_portal.client_id
+  client-secret: #@ data.values.waas_portal.client_secret
+  issuer-uri: https://myvmware.workspaceair.com/SAAS/auth
+  provider: workspaceair
+  scope: openid, email, profile, user
+  type: oauth2
+  user-info-uri: https://myvmware.workspaceair.com/SAAS/jersey/manager/api/userinfo
+---
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: waas
+  namespace: waas-portal
+  labels:
+    apps.tanzu.vmware.com/workload-type: web-custom-hostname
+    app.kubernetes.io/part-of: waas
+spec:
+  build:
+    env:
+    - name: BP_JVM_VERSION
+      value: "17"
+  source:
+    git:
+      url: https://github.com/Tanzu-Solutions-Engineering/waas-portal.git
+      ref:
+        branch: main
+  serviceClaims:
+  - name: workspaceair
+    ref:
+      apiVersion: v1
+      kind: Secret
+      name: waas-portal-values
+  params:
+    - name: annotations
+      value:
+        autoscaling.knative.dev/minScale: "1"
+    - name: custom-hostname
+      value: waas
