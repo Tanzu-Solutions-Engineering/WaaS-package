@@ -2,7 +2,13 @@ apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
   name: tdc-bellevue
+  annotations:
+    kapp.k14s.io/update-strategy: always-replace
 spec:
+  portal:
+    registration:
+      type: anonymous
+    password: TAPRocks!
   workshops:
   - capacity: 30
     expires: 240m
