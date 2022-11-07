@@ -1,0 +1,12 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: TrainingPortal
+metadata:
+  name: tdc-bellevue
+spec:
+  workshops:
+  - capacity: 30
+    expires: 240m
+    name: tap-overview
+    orphaned: 5m
+    initial: 15
+    reserved: 2
