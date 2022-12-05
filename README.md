@@ -16,3 +16,7 @@ Copy setup/values-example.yaml to values.yaml, and edit for your install.  Then 
 
 Apply the App definition for kapp-controller to reconcile for us.
 `kubectl apply -f setup/waas-install.yaml`
+
+# Updating install settings
+Apply changes to your cluster.
+`kubectl create secret generic waas-install-values -n waas-install --from-file=values.yaml --dry-run=client -o yaml | kubectl apply -f-`
