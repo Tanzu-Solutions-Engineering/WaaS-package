@@ -18,7 +18,7 @@ spec:
   packageRef:
     refName: le-certmanager.vmware.com
     versionSelection:
-      constraints: "1.0.0"
+      constraints: "2.0.0"
       prereleases: {}
   values:
   - secretRef:
