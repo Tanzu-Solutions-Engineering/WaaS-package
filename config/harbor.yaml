@@ -18,7 +18,7 @@ spec:
   packageRef:
     refName: harbor.tanzu.vmware.com
     versionSelection:
-      constraints: ">2.2.3"
+      constraints: ">2.6.0 <2.7.0"
       prereleases: {}
   serviceAccountName: waas-install-sa
   values:
