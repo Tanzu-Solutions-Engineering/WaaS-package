@@ -7,15 +7,26 @@ metadata:
   name: tap-install
 ---
 apiVersion: v1
-stringData:
-  #@yaml/text-templated-strings
-  .dockerconfigjson: |
-    {"auths":{"registry.tanzu.vmware.com":{"username":"(@= data.values.tap.buildservice.tanzunet_username @)","password":"(@= data.values.tap.buildservice.tanzunet_password @)"}}}
 kind: Secret
 metadata:
   name: tap-registry
   namespace: tap-install
 type: kubernetes.io/dockerconfigjson
+stringData:
+  #@yaml/text-templated-strings
+  .dockerconfigjson: |
+    {
+      "auths":{
+        "registry.tanzu.vmware.com":{
+          "username":"(@= data.values.tap.buildservice.tanzunet_username @)",
+          "password":"(@= data.values.tap.buildservice.tanzunet_password @)"
+        },
+        "(@= data.values.harbor.hostname @)":{
+          "username": "(@= data.values.harbor_project_controller.harbor.username @)",
+          "password": "(@= data.values.harbor_project_controller.harbor.password @)"
+        }
+      }
+    }
 ---
 apiVersion: secretgen.carvel.dev/v1alpha1
 kind: SecretExport
