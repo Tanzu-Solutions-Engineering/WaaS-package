@@ -22,8 +22,8 @@ stringData:
           "password":"(@= data.values.tap.buildservice.tanzunet_password @)"
         },
         "(@= data.values.harbor.hostname @)":{
-          "username": "(@= data.values.harbor_project_controller.harbor.username @)",
-          "password": "(@= data.values.harbor_project_controller.harbor.password @)"
+          "username": "(@= data.values.waas_catalog.harbor.user @)",
+          "password": "(@= data.values.waas_catalog.harbor.adminPassword @)"
         }
       }
     }
