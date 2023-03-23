@@ -39,6 +39,8 @@ gitea:
   ingress_domain: ""
   ingress_secret: ""
   extra_repository_config: ""
+  admin_username: "gitea_admin"
+  admin_password: ""
 
 devnexus:
   passcode: ""
