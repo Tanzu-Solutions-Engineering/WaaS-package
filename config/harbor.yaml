@@ -144,7 +144,7 @@ stringData:
             - name: HARBOR_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: harbor-core-ver-1
+                  name: harbor-core
                   key: HARBOR_ADMIN_PASSWORD
             - name: HARBOR_PROJECT_CONTROLLER_USER
               valueFrom:
