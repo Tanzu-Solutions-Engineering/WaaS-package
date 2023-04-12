@@ -47,7 +47,7 @@ metadata:
 spec:
   fetch:
     imgpkgBundle:
-      image: harbor.workshop.amer.end2end.link/registry-tanzu/tap-packages:1.4.0
+      image: harbor.workshop.amer.end2end.link/registry-tanzu/tap-packages:1.5.0
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -102,7 +102,7 @@ spec:
   packageRef:
     refName: tap.tanzu.vmware.com
     versionSelection:
-      constraints: ">=1.4.0 <1.5.0"
+      constraints: ">=1.5.0 <1.6.0"
       prereleases: {}
   serviceAccountName: tap-package-install-sa
   values:
