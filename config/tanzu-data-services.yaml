@@ -25,4 +25,4 @@ spec:
   packageRef:
     refName: mysql-operator.with.sql.tanzu.vmware.com
     versionSelection:
-      constraints: "1.2.0"
+      constraints: ">=1.5.0 <1.6.0"
