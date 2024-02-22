@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: educates-package
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: educates
+  namespace: educates-package
+spec:
+  fetch:
+    imgpkgBundle:
+      image: ghcr.io/vmware-tanzu-labs/educates-packages:2.6.16
